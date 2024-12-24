@@ -48,7 +48,7 @@ function voltarParaAtelaInicial() {
   <section v-if="isUpdateUi === 'inicio'" class="container">
     <div class="teste">
       <nav>
-        <RouterLink to="/">Voltar para a tela inicial</RouterLink>
+        <RouterLink style="color: #0bd644" to="/">Voltar para a tela inicial</RouterLink>
       </nav>
       <h3>Jogo da forca</h3>
       <select
