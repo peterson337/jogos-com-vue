@@ -6,7 +6,9 @@
       >Jogo da forca</RouterLink
     >
 
-    <!-- <a href="" class="react">Jogos com react</a> -->
+    <a href="https://jogos-com-react.vercel.app/" class="react"
+      >Jogos com react</a
+    >
   </nav>
 </template>
 
