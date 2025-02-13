@@ -153,20 +153,19 @@ export default {
     ]);
 
     const enviarLetra = (letra, validationInput) => {
-      if (validationInput !== `input`) {
-        const btnLetra = document.getElementById(`${letra}`);
-        btnLetra.classList.remove("botoes");
-        btnLetra.classList.add("disable");
-        btnLetra.disabled = true;
-      }
+      const letraFormatada = letra.toLowerCase();
+      const btnLetra = document.getElementById(`${letraFormatada}`);
+      btnLetra.classList.remove("botoes");
+      btnLetra.classList.add("disable");
+      btnLetra.disabled = true;
 
       formatar.forEach((item, index) => {
-        if (item === letra) {
-          arrayVersaoFinal.value[index].letra = letra;
+        if (item === letraFormatada) {
+          arrayVersaoFinal.value[index].letra = letraFormatada;
         }
       });
 
-      const validation = palavraFormatada.indexOf(letra);
+      const validation = palavraFormatada.indexOf(letraFormatada);
 
       const ifJogadorGanhou = arrayVersaoFinal.value
         .map((item) => item.letra)

@@ -4,32 +4,43 @@ import JogoForcaLaout from "./JogoForcaLaout.vue";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { RouterLink, RouterView } from "vue-router";
 
-const apiKey = import.meta.env.VITE_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
-// prettier-ignore
-const model = genAI.getGenerativeModel({model: "gemini-1.5-flash",});
-
 const estado = ref("");
 const messageError = ref("");
 const isUpdateUi = ref("inicio");
 const input = ref("");
+const gemini = ref("gemini-2.0-flash");
+
+const apiKey = import.meta.env.VITE_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
+// prettier-ignore
+const model = genAI.getGenerativeModel({model: 'gemini-1.5-flash',});
+
+// gemini-1.5-flash
+// gemini-2.0-flash
 
 const wordsKey = reactive([
-  "Nome aleatório de um personagem",
-  "Nome aleatório de um filme",
-  "Nome aleatório de um anime que não seja naruto",
-  "Nome aleatório de um animal",
-  "Nome aleatório de uma fruta",
-  "Nome aleatório de um objeto",
-  "Nome aleatório de uma comida",
-  "Nome aleatório de um jogo de video game",
+  "Nome  de um personagem",
+  "Nome de um mangá",
+  "Nome  de um filme",
+  "Nome  de um animal",
+  "Nome  de uma fruta",
+  "Nome  de um objeto",
+  "Nome de uma comida",
+  "Nome de um jogo de video game",
+  "Nome de uma cor",
+  "Nome de música",
 ]);
+// "Nome de uma cidade",
 const submit = async () => {
+  // prettier-ignore
+  // if(estado.value == "Nome de uma comida") gemini.value =  'gemini-1.5-flash' ;
+  // else gemini.value = 'gemini-2.0-flash';
+
   isUpdateUi.value = "loading";
 
   try {
     const result = await model.generateContent(
-      `Eu quero que a única coisa que você escreva seja um ${estado.value} ${input.value} e não separe o nome por espaço separe por hífen`
+      `Eu quero que a única coisa que você escreva seja um ${estado.value} ${input.value} e  separe por hífen, além disso,  todas as letras devem ser minúsculas`
     );
     estado.value = result.response
       .text()
