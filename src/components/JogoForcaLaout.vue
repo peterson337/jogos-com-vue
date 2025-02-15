@@ -94,13 +94,14 @@ export default {
     const palavraFormatada = props.estado.toLowerCase();
 
     const validarHifen = palavraFormatada.indexOf("-");
-    alert(
-      `${
-        validarHifen === -1
-          ? `A palavra que deve ser adivinhada tem ${palavraFormatada.length} letras e não possuí hífen.`
-          : `A palavra que deve ser adivinhada tem ${palavraFormatada.length} letras e possuí hífen.`
-      } `
-    );
+
+    // alert(
+    //   `${
+    //     validarHifen === -1
+    //       ? `A palavra que deve ser adivinhada tem ${palavraFormatada.length} letras e não possuí hífen.`
+    //       : `A palavra que deve ser adivinhada tem ${palavraFormatada.length} letras e possuí hífen.`
+    //   } `
+    // );
     const countError = ref(0);
     const fimDeJogo = ref(false);
 
@@ -149,15 +150,58 @@ export default {
       "ç",
       "ã",
       ":",
-      "-",
+      "á",
+      "é",
+      "í",
+      "ó",
+      "ú",
+      "à",
+      "â",
+      "ê",
+      "ô",
+      "ã",
+      "õ",
+      "!",
+      "?",
+      ".",
+      ",",
+      ";",
+      ":",
+      "_",
+      "(",
+      ")",
+      "[",
+      "]",
+      "{",
+      "}",
+      "'",
+      '"',
+      "/",
+      // "\\",
+      "|",
+      "@",
+      "#",
+      "$",
+      "%",
+      "&",
+      "*",
+      "+",
+      "=",
+      "<",
+      ">",
+      // "ü",
+      // "ö",
+      // "ä"
     ]);
 
-    const enviarLetra = (letra, validationInput) => {
+    const enviarLetra = (letra) => {
       const letraFormatada = letra.toLowerCase();
-      const btnLetra = document.getElementById(`${letraFormatada}`);
-      btnLetra.classList.remove("botoes");
-      btnLetra.classList.add("disable");
-      btnLetra.disabled = true;
+      if (letra !== "-") {
+        const btnLetra = document.getElementById(`${letraFormatada}`);
+        btnLetra.classList.remove("botoes");
+        btnLetra.classList.add("disable");
+        btnLetra.disabled = true;
+      }
 
       formatar.forEach((item, index) => {
         if (item === letraFormatada) {
@@ -178,6 +222,8 @@ export default {
         countError.value === 7 && (fimDeJogo.value = true);
       }
     };
+
+    if (validarHifen !== -1) enviarLetra("-");
 
     return {
       alterarEstado,
@@ -265,6 +311,8 @@ export default {
   font-size: 25px;
   cursor: pointer;
   color: black;
+  border: none;
+  outline: none;
 }
 
 .botoes:hover {
@@ -279,6 +327,8 @@ export default {
   gap: 15px;
   width: 80%;
   margin: auto;
+  height: 30rem;
+  overflow: auto;
 }
 
 .teste {

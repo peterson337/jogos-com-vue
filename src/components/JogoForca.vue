@@ -8,52 +8,46 @@ const estado = ref("");
 const messageError = ref("");
 const isUpdateUi = ref("inicio");
 const input = ref("");
-const gemini = ref("gemini-2.0-flash");
 
 const apiKey = import.meta.env.VITE_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 // prettier-ignore
-const model = genAI.getGenerativeModel({model: 'gemini-1.5-flash',});
+const model = genAI.getGenerativeModel({model: 'gemini-2.0-flash',});
 
-// gemini-1.5-flash
-// gemini-2.0-flash
-
+// duna-parte-dois
 const wordsKey = reactive([
-  "Nome  de um personagem",
-  "Nome de um mangá",
-  "Nome  de um filme",
-  "Nome  de um animal",
-  "Nome  de uma fruta",
-  "Nome  de um objeto",
-  "Nome de uma comida",
-  "Nome de um jogo de video game",
-  "Nome de uma cor",
-  "Nome de música",
+  "um único personagem",
+  "um único mangá",
+  "um único filme",
+  "um único animal",
+  "uma única a fruta",
+  "um único objeto",
+  "uma única comida",
+  "um único jogo de video game",
+  "uma única cor",
+  "uma única música",
 ]);
 // "Nome de uma cidade",
-const submit = async () => {
-  // prettier-ignore
-  // if(estado.value == "Nome de uma comida") gemini.value =  'gemini-1.5-flash' ;
-  // else gemini.value = 'gemini-2.0-flash';
+ const submit = async () => {
+     isUpdateUi.value = "loading";
+    try {
+      const result = await model.generateContent(
+        `Escreva sempre apenas o nome aleatório de ${estado.value} ${input.value}, sem repetir nomes já mencionados anteriormente. Não inclua mais de um nome na mesma resposta, separe as palavras por hífen e utilize apenas letras minúsculas.`
+      );
+      estado.value = result.response
+        .text()
+        .replace(/^-+|-+$/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+       isUpdateUi.value = "";
+       input.value = "";
 
-  isUpdateUi.value = "loading";
-
-  try {
-    const result = await model.generateContent(
-      `Eu quero que a única coisa que você escreva seja um ${estado.value} ${input.value} e  separe por hífen, além disso,  todas as letras devem ser minúsculas`
-    );
-    estado.value = result.response
-      .text()
-      .replace(/^-+|-+$/g, "")
-      .trim();
-    isUpdateUi.value = "";
-    input.value = "";
-  } catch (error) {
-    console.log(error);
-    isUpdateUi.value = "error";
-    messageError.value = error.message;
-  }
-};
+    } catch (error) {
+      console.log(error);
+      isUpdateUi.value = "error";
+      messageError.value = error.message;
+    }
+ };
 
 function voltarParaAtelaInicial() {
   isUpdateUi.value = "inicio";
