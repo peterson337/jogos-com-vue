@@ -26,32 +26,50 @@ const wordsKey = reactive([
   "um único jogo de video game",
   "uma única cor",
   "uma única música",
+  "uma única cidade",
+  "um  único país",
+  "uma única banda",
+  "uma única serie",
+  "um única livro",
 ]);
-// "Nome de uma cidade",
- const submit = async () => {
-     isUpdateUi.value = "loading";
-    try {
-      const result = await model.generateContent(
-        `Escreva sempre apenas o nome aleatório de ${estado.value} ${input.value}, sem repetir nomes já mencionados anteriormente. Não inclua mais de um nome na mesma resposta, separe as palavras por hífen e utilize apenas letras minúsculas.`
-      );
-      estado.value = result.response
-        .text()
-        .replace(/^-+|-+$/g, "")
-        .trim()
-        .replace(/\s+/g, "-")
-       isUpdateUi.value = "";
-       input.value = "";
 
-    } catch (error) {
-      console.log(error);
-      isUpdateUi.value = "error";
-      messageError.value = error.message;
-    }
- };
+const submit = async () => {
+  isUpdateUi.value = "loading";
+  try {
+    const result = await model.generateContent(
+      `Escreva sempre apenas o nome aleatório de ${estado.value} ${input.value}, sem repetir nomes já mencionados anteriormente. Não inclua mais de um nome na mesma resposta, separe as palavras por hífen e utilize apenas letras minúsculas.`
+    );
+    estado.value = result.response
+      .text()
+      .replace(/^-+|-+$/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+    isUpdateUi.value = "";
+    input.value = "";
+  } catch (error) {
+    console.log(error);
+    isUpdateUi.value = "error";
+    messageError.value = error.message;
+  }
+};
+
+const mudarValorDropdown = (e) => {
+  const dropdown = document.getElementById("dropdown");
+  dropdown.value = e.target.textContent;
+  estado.value = e.target.textContent;
+};
 
 function voltarParaAtelaInicial() {
   isUpdateUi.value = "inicio";
 }
+
+const formatarPalavra = (value) => {
+  if (value === "um único jogo de video game") {
+    const palavraFormatada = value.substring(0, value.length - 13);
+    return palavraFormatada + "...";
+  }
+  return value;
+};
 </script>
 
 <template>
@@ -61,19 +79,30 @@ function voltarParaAtelaInicial() {
         <RouterLink class="link" to="/">Voltar para a tela inicial</RouterLink>
       </nav>
       <h3>Jogo da forca</h3>
-      <select
-        class="form-select"
-        aria-label="Default select example"
-        v-model="estado"
-        style="margin: 10px"
-      >
-        <option value="" selected style="display: none">
-          Selecione algo...
-        </option>
-        <option v-for="item in wordsKey" :key="item">
-          {{ item }}
-        </option>
-      </select>
+      <div class="dropdown">
+        <input
+          class="dropdown-toggle form-select"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          style="margin-bottom: 10px"
+          value="Escolha uma palavra"
+          id="dropdown"
+        />
+
+        <ul class="dropdown-menu dropdownMenu">
+          <div style="height: 200px; overflow-y: scroll">
+            <p
+              class="itemsDropdown"
+              v-for="item in wordsKey"
+              :key="item"
+              @click="(e) => mudarValorDropdown(e)"
+            >
+              {{ formatarPalavra(item) }}
+            </p>
+          </div>
+        </ul>
+      </div>
 
       <input
         type="text"
@@ -98,7 +127,7 @@ function voltarParaAtelaInicial() {
     style="display: flex; flex-direction: column"
     v-else-if="isUpdateUi === 'error'"
   >
-    <h2 style="margin-bottom: 30px">Não foi possível carregar jogo</h2>
+    <h2 style="margin-bottom: 30px">Não foi possível carregar o jogo</h2>
     <h3>Mensagem de erro: {{ messageError }}</h3>
   </section>
 
@@ -127,6 +156,14 @@ function voltarParaAtelaInicial() {
 </template>
 
 <style scoped>
+.dropdownMenu {
+  padding: 10px;
+  border-radius: 20px;
+  /* border: 1px solid #000; */
+  width: 15rem;
+  outline: none;
+}
+
 .link {
   color: #0bd644;
 }
@@ -157,6 +194,19 @@ section {
   padding: 10rem;
   border-radius: 20px;
   height: 10rem;
+}
+
+.itemsDropdown {
+  cursor: pointer;
+  width: 95%;
+  padding-right: 10px;
+}
+
+.itemsDropdown:hover {
+  cursor: pointer;
+  background-color: darkturquoise;
+  border-radius: 20px;
+  padding: 10px;
 }
 
 @media (max-width: 600px) {

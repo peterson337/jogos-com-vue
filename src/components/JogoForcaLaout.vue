@@ -11,14 +11,12 @@
       </button>
       <p class="errroCount">erros: {{ countError }}/7</p>
     </section>
-    <br />
 
     <div class="teste">
       <section v-for="item in arrayVersaoFinal" :key="item.id" class="palavra">
         {{ item.letra }}
       </section>
     </div>
-    <br />
     <div class="flexRow">
       <button
         :id="item"
@@ -192,6 +190,16 @@ export default {
       // "ü",
       // "ö",
       // "ä"
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
     ]);
 
     const enviarLetra = (letra) => {
@@ -313,6 +321,7 @@ export default {
   color: black;
   border: none;
   outline: none;
+  margin-right: 4px;
 }
 
 .botoes:hover {
@@ -339,6 +348,7 @@ export default {
   width: 100%;
   height: 6rem;
   overflow: auto;
+  margin-bottom: 10px;
 }
 .palavra {
   display: flex;
@@ -366,12 +376,13 @@ export default {
   .teste {
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: center;
     align-items: start;
-    text-align: start;
+    text-align: center;
     width: 100%;
     height: 8rem;
     overflow: auto;
+    margin-top: 10px;
   }
 
   .palavra {
@@ -400,7 +411,6 @@ export default {
     width: 100%;
     height: 14rem;
     overflow: auto;
-    margin-top: 5px;
   }
 
   .btnAndInput {
