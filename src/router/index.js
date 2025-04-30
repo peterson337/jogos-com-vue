@@ -15,6 +15,11 @@ const router = createRouter({
       name: "Home",
       component: () => import("../components/HomeView.vue"),
     },
+    {
+      path: "/snake-game",
+      name: "SnakeGame",
+      component: () => import("../components/snakeGame.vue"),
+    },
   ],
 });
 
