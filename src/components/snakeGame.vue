@@ -2,6 +2,8 @@
   <main class="containerGame">
     <section class="headerGame">
       <h2 class="titleGame">Snake Game</h2>
+      <RouterLink class="link" to="/">Voltar para a tela inicial</RouterLink>
+
       <h3>Score: {{ pontos }}</h3>
     </section>
 
@@ -40,21 +42,28 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+
+const criarComida = () => {
+  const tela = document.querySelector(".tela");
+
+  const criarComida = {
+    id: Math.random(),
+    top: `${Math.floor(Math.random() * tela.clientHeight)}px`,
+    left: `${Math.floor(Math.random() * tela.clientWidth)}px`,
+  };
+
+  comidas.value.push(criarComida);
+};
+
+onMounted(() => criarComida());
+
 const up = ref(0);
 const down = ref(0);
 const left = ref(0);
 const right = ref(0);
 const tamanhoDaCobra = ref(35);
 const pontos = ref(0);
-const comidas = ref([
-  {
-    id: 1,
-    top: `${Math.floor(Math.random() * 100)}px`,
-    left: `${Math.floor(Math.random() * 100)}px`,
-  },
-]);
-const tela = document.querySelector(".tela");
-
+const comidas = ref([]);
 window.addEventListener("keydown", (e) => moveSnake(e.key));
 
 const moveSnake = (e) => {
@@ -80,7 +89,7 @@ const moveSnake = (e) => {
 
   const teste3 = Math.abs(comidaDevoradaCima);
 
-  console.log(teste3);
+  // console.log(teste3);
 
   if (
     //prettier-ignore
@@ -91,62 +100,56 @@ const moveSnake = (e) => {
     Number(teste3)  < 20
   ) {
     comida.remove();
-    comidas.value.push({
-      id: comidas.value.length + 1,
-      top: `${Math.floor(Math.random() * 100)}px`,
-      left: `${Math.floor(Math.random() * 100)}px`,
-    });
+    criarComida();
     tamanhoDaCobra.value = tamanhoDaCobra.value + 5;
     snake.style.height = `${tamanhoDaCobra.value}px`;
     pontos.value = pontos.value + 1;
-
-    // alert("comeu");
   }
-
-  //Todo: fazer a comida sumir e aparecer em outro lugar quando a cobra encostar nela
-  //   comida.remove();
-
-  //   comidas.value.push({
-  //     id: comidas.value.length + 1,
-  //     top: `${Math.floor(Math.random() * 1000)}px`,
-  //     left: `${Math.floor(Math.random() * 1000)}px`,
-  //   });
-
-  //   snake.style.height = "40px";
-
-  //Todo========================================================================
 
   const fimDaTela = document.querySelector(".tela").getBoundingClientRect();
 
-  const teste = snake.getBoundingClientRect();
+  const posicaoCobra = snake.getBoundingClientRect();
 
-  // if (snake.offsetTop <= 2) alert("Game Over");
+  // console.log("posição cobra", posicaoCobra, "posição tela", fimDaTela);
 
-  // if (snake.offsetLeft <= 6) alert("Game Over");
+  if (
+    posicaoCobra.right > fimDaTela.right ||
+    posicaoCobra.bottom > fimDaTela.bottom ||
+    posicaoCobra.left < fimDaTela.left ||
+    posicaoCobra.top < fimDaTela.top
+  ) {
+    alert("Game Over");
 
-  // if (snake.offsetTop >= 845) alert("Game Over");
+    window.location.reload();
+  }
 
   if (e === "ArrowUp") {
-    up.value = up.value + 10;
+    if (snake.style.rotate === "180deg") up.value = up.value + 10;
     snake.style.marginBottom = `${up.value}px`;
     snake.style.rotate = "180deg";
   } else if (e === "ArrowDown") {
-    down.value = down.value + 10;
+    if (snake.style.rotate === "180deg") down.value = down.value + 10;
     snake.style.marginTop = `${down.value}px`;
     snake.style.rotate = "180deg";
   } else if (e === "ArrowLeft") {
-    left.value = left.value + 10;
+    if (snake.style.rotate === "90deg") left.value = left.value + 10;
     snake.style.marginRight = `${left.value}px`;
     snake.style.rotate = "90deg";
   } else if (e === "ArrowRight") {
-    right.value = right.value + 10;
+    if (snake.style.rotate === "90deg") right.value = right.value + 10;
     snake.style.marginLeft = `${right.value}px`;
     snake.style.rotate = "90deg";
   }
 };
+
+window.addEventListener("resize", () => window.location.reload());
 </script>
 
 <style scoped>
+.link {
+  color: #0bd644;
+}
+
 .titleGame {
   text-align: center;
 }
@@ -167,6 +170,7 @@ const moveSnake = (e) => {
   border: 2px solid white;
   border-radius: 20px;
   position: relative;
+  overflow: clip;
 }
 
 #snake {
@@ -175,6 +179,7 @@ const moveSnake = (e) => {
   background-color: #0bd644;
   position: absolute;
   border-radius: 20px;
+  /* transition: transform 0.2s ease, margin 0.2s ease; */
 }
 
 .controls {
