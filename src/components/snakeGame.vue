@@ -1,8 +1,20 @@
 <template>
   <main class="containerGame">
-    <h2>Snake Game</h2>
+    <section class="headerGame">
+      <h2 class="titleGame">Snake Game</h2>
+      <h3>Score: {{ pontos }}</h3>
+    </section>
+
     <section class="tela">
       <div id="snake"></div>
+
+      <div
+        v-for="item in comidas"
+        :key="item.id"
+        class="comida"
+        :style="{ top: item.top, left: item.left }"
+        id="bolinha"
+      ></div>
     </section>
 
     <div class="controls">
@@ -32,61 +44,120 @@ const up = ref(0);
 const down = ref(0);
 const left = ref(0);
 const right = ref(0);
+const tamanhoDaCobra = ref(35);
+const pontos = ref(0);
+const comidas = ref([
+  {
+    id: 1,
+    top: `${Math.floor(Math.random() * 100)}px`,
+    left: `${Math.floor(Math.random() * 100)}px`,
+  },
+]);
 const tela = document.querySelector(".tela");
 
 window.addEventListener("keydown", (e) => moveSnake(e.key));
 
-const teste = () => {
-  const tela = document.querySelector(".tela");
-  // const telaWidth = tela.offsetWidth;
-  // const telaHeight = tela.offsetHeight;
-
-  const comida = document.createElement("div");
-
-  comida.classList.add("comida");
-
-  comida.style.top = `${Math.floor(Math.random() * 100)}px`;
-  comida.style.left = `${Math.floor(Math.random() * 100)}px`;
-
-  tela.appendChild(comida);
-
-  console.log(comida);
-};
-
-onMounted(() => teste());
-
 const moveSnake = (e) => {
   const snake = document.getElementById("snake");
+
+  const snakePosicao = document.getElementById("snake").getBoundingClientRect();
+
+  const comida = document.getElementById("bolinha");
+  const comidaPosicao = document
+    .getElementById("bolinha")
+    .getBoundingClientRect();
+
+  const comidaDevoradaDireita = snakePosicao.left - comidaPosicao.left;
+
+  const comidaDevoradaCima = snakePosicao.top - comidaPosicao.top;
+
+  // console.log(Number(comidaDevoradaCima).toLocaleString().split(",")[0]);
+
+  const teste2 = !Number(comidaDevoradaCima)
+    .toLocaleString()
+    .split(",")[0]
+    .includes("-");
+
+  const teste3 = Math.abs(comidaDevoradaCima);
+
+  console.log(teste3);
+
+  if (
+    //prettier-ignore
+    Number(comidaDevoradaDireita).toLocaleString().split(",")[0] < 15 &&
+     //prettier-ignore
+    !Number(comidaDevoradaDireita).toLocaleString().split(",")[0].includes("-") &&
+     //prettier-ignore
+    Number(teste3)  < 20
+  ) {
+    comida.remove();
+    comidas.value.push({
+      id: comidas.value.length + 1,
+      top: `${Math.floor(Math.random() * 100)}px`,
+      left: `${Math.floor(Math.random() * 100)}px`,
+    });
+    tamanhoDaCobra.value = tamanhoDaCobra.value + 5;
+    snake.style.height = `${tamanhoDaCobra.value}px`;
+    pontos.value = pontos.value + 1;
+
+    // alert("comeu");
+  }
+
+  //Todo: fazer a comida sumir e aparecer em outro lugar quando a cobra encostar nela
+  //   comida.remove();
+
+  //   comidas.value.push({
+  //     id: comidas.value.length + 1,
+  //     top: `${Math.floor(Math.random() * 1000)}px`,
+  //     left: `${Math.floor(Math.random() * 1000)}px`,
+  //   });
+
+  //   snake.style.height = "40px";
+
+  //Todo========================================================================
 
   const fimDaTela = document.querySelector(".tela").getBoundingClientRect();
 
   const teste = snake.getBoundingClientRect();
 
-  console.log("snake", snake.offsetLeft);
+  // if (snake.offsetTop <= 2) alert("Game Over");
 
-  if (snake.offsetTop <= 2) alert("Game Over");
-
-  if (snake.offsetLeft <= 6) alert("Game Over");
+  // if (snake.offsetLeft <= 6) alert("Game Over");
 
   // if (snake.offsetTop >= 845) alert("Game Over");
 
   if (e === "ArrowUp") {
     up.value = up.value + 10;
     snake.style.marginBottom = `${up.value}px`;
+    snake.style.rotate = "180deg";
   } else if (e === "ArrowDown") {
     down.value = down.value + 10;
     snake.style.marginTop = `${down.value}px`;
+    snake.style.rotate = "180deg";
   } else if (e === "ArrowLeft") {
     left.value = left.value + 10;
     snake.style.marginRight = `${left.value}px`;
+    snake.style.rotate = "90deg";
   } else if (e === "ArrowRight") {
     right.value = right.value + 10;
     snake.style.marginLeft = `${right.value}px`;
+    snake.style.rotate = "90deg";
   }
 };
 </script>
 
 <style scoped>
+.titleGame {
+  text-align: center;
+}
+
+.headerGame {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+
 .tela {
   display: flex;
   justify-content: center;
@@ -100,9 +171,10 @@ const moveSnake = (e) => {
 
 #snake {
   width: 20px;
-  height: 20px;
+  height: 35px;
   background-color: #0bd644;
   position: absolute;
+  border-radius: 20px;
 }
 
 .controls {
