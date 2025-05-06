@@ -43,13 +43,13 @@ export default {
 
       this.ctx.fillStyle = "red";
       //prettier-ignore
-      this.ctx.fillRect(this.posicaoComidaX, this.posicaoComidaY, this.blockSize, this.blockSize);
+      this.ctx.fillRect(this.posicaoComidaX, this.posicaoComidaY, 30, 30);
     },
     drawSnake() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.snake.forEach((segment) => {
         this.ctx.fillStyle = "green";
-        this.ctx.fillRect(segment.x, segment.y, this.blockSize, this.blockSize);
+        this.ctx.fillRect(segment.x, segment.y, 30, 30);
       });
 
       this.criarComida();
@@ -68,6 +68,16 @@ export default {
       }
       if (this.direction === "ArrowRight") {
         head.x += this.blockSize;
+      }
+
+      if (
+        head.x > this.canvas.width - 20 ||
+        head.x === -30 ||
+        head.y > this.canvas.height - 10 ||
+        head.y === -20
+      ) {
+        alert("Game Over");
+        window.location.reload();
       }
 
       if (
