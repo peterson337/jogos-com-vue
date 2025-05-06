@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <canvas ref="gameCanvas" width="500" height="600"></canvas>
+  <h3>Snake game</h3>
+  <div class="headerContainer">
+    <RouterLink class="link" to="/">Voltar para a tela inicial</RouterLink>
+    <h3>score: {{ score }}</h3>
   </div>
+  <canvas ref="gameCanvas" width="500" height="600"></canvas>
 </template>
 
 <script>
@@ -12,41 +15,79 @@ export default {
       canvas: null,
       ctx: null,
       snake: [{ x: 250, y: 300 }],
-      direction: "UP",
       blockSize: 20,
+      posicaoComidaX: null,
+      posicaoComidaY: null,
+      calcularPosicaoComida: true,
+      score: 0,
     };
   },
   methods: {
+    resetSnake(head) {
+      this.snake.unshift(head);
+      this.snake.pop();
+      this.criarComida();
+      this.drawSnake();
+    },
+    calcularPosicaoComidaMath() {
+      if (this.calcularPosicaoComida) {
+        //prettier-ignore
+        this.posicaoComidaX = Math.floor(Math.random() * (this.canvas.width / this.blockSize)) * this.blockSize;
+        //prettier-ignore
+        this.posicaoComidaY = Math.floor(Math.random() * (this.canvas.height / this.blockSize)) * this.blockSize;
+        this.calcularPosicaoComida = false;
+      }
+    },
+    criarComida() {
+      this.calcularPosicaoComidaMath();
+
+      this.ctx.fillStyle = "red";
+      //prettier-ignore
+      this.ctx.fillRect(this.posicaoComidaX, this.posicaoComidaY, this.blockSize, this.blockSize);
+    },
     drawSnake() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.snake.forEach((segment) => {
         this.ctx.fillStyle = "green";
         this.ctx.fillRect(segment.x, segment.y, this.blockSize, this.blockSize);
       });
+
+      this.criarComida();
     },
     moveSnake() {
       const head = { ...this.snake[0] };
-      if (this.direction === "UP") head.y -= this.blockSize;
-      if (this.direction === "DOWN") head.y += this.blockSize;
-      if (this.direction === "LEFT") head.x -= this.blockSize;
-      if (this.direction === "RIGHT") head.x += this.blockSize;
 
-      this.snake.unshift(head);
-      this.snake.pop();
+      if (this.direction === "ArrowUp") {
+        head.y -= this.blockSize;
+      }
+      if (this.direction === "ArrowDown") {
+        head.y += this.blockSize;
+      }
+      if (this.direction === "ArrowLeft") {
+        head.x -= this.blockSize;
+      }
+      if (this.direction === "ArrowRight") {
+        head.x += this.blockSize;
+      }
+
+      if (
+        //prettier-ignore
+        head.y === this.posicaoComidaY && ((head.x - 10) === this.posicaoComidaX || (head.x + 10) === this.posicaoComidaX)
+      ) {
+        this.calcularPosicaoComida = true;
+        this.snake.push({ x: 250, y: 300 });
+        this.resetSnake(head);
+        this.score += 1;
+      }
+
+      this.resetSnake(head);
     },
     changeDirection(event) {
-      this.gameLoop();
       const key = event.key;
-      if (key === "ArrowUp" && this.direction !== "DOWN") this.direction = "UP";
-      if (key === "ArrowDown" && this.direction !== "UP")
-        this.direction = "DOWN";
-      if (key === "ArrowLeft" && this.direction !== "RIGHT")
-        this.direction = "LEFT";
-      if (key === "ArrowRight" && this.direction !== "LEFT")
-        this.direction = "RIGHT";
-    },
-    gameLoop() {
+      this.direction = key;
       this.moveSnake();
+    },
+    update() {
       this.drawSnake();
     },
   },
@@ -54,7 +95,8 @@ export default {
     this.canvas = this.$refs.gameCanvas;
     this.ctx = this.canvas.getContext("2d");
     window.addEventListener("keydown", this.changeDirection);
-    this.gameLoop();
+    this.update();
+    this.criarComida();
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.changeDirection);
@@ -62,8 +104,27 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 canvas {
   background-color: white;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.link {
+  color: #0bd644;
+}
+
+.link:hover {
+  color: #05992f;
+  background-color: #0bd644;
+  padding: 7px;
+  border-radius: 20px;
 }
 </style>
