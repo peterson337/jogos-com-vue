@@ -1,12 +1,45 @@
 <template>
   <section class="backgroundModal">
     <div class="modalContent">
-      <h3>Hello world!</h3>
+      <div v-if="content === 'snakeGame'">
+        <h3>Game over!</h3>
+        <h4>Pressione R ou clique no botão vermelho para jogar novamente</h4>
+        <button
+          style="margin-bottom: 10px"
+          class="btn btn-danger"
+          @click="reiniciarJogo"
+        >
+          Recomeçar o jogo
+        </button>
+      </div>
     </div>
   </section>
 </template>
 
-<script setup></script>
+<script>
+export default {
+  name: "ModalComponent",
+  props: {
+    content: {
+      content: String,
+    },
+  },
+
+  methods: {
+    reiniciarJogo() {
+      window.location.reload();
+    },
+  },
+
+  mounted() {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "r" || e.key === "R") {
+        this.reiniciarJogo();
+      }
+    });
+  },
+};
+</script>
 
 <style scoped>
 .backgroundModal {
@@ -35,5 +68,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 </style>

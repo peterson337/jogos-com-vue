@@ -50,7 +50,7 @@
   </main>
 
   <div v-else>
-    <Modal />
+    <Modal content="snakeGame" />
   </div>
 </template>
 
@@ -71,7 +71,7 @@ export default {
       calcularPosicaoComida: true,
       score: 0,
       jogoRodando: true,
-      isOpenModalFimDeJogo: true,
+      isOpenModalFimDeJogo: false,
     };
   },
   methods: {
@@ -88,27 +88,8 @@ export default {
 
     gameOver() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      // if (window.innerWidth < 600) {
-      //   this.ctx.fillStyle = "red";
-      //   this.ctx.font = "20px Comic Sans MS";
-      //   this.ctx.fillText("Game Over!", 150 / 3, 250 / 2);
-      //   this.ctx.fillStyle = "black";
-      //   this.ctx.font = "10px Comic Sans MS";
-      //   this.ctx.fillText("Pressione R para jogar novamente", 90 / 3, 300 / 2);
-      //   this.jogoRodando = false;
-      // } else {
-      //   this.ctx.fillStyle = "red";
-      //   this.ctx.font = "30px Comic Sans MS";
-      //   this.ctx.fillText("Game Over!", 150, 250);
-      //   this.ctx.fillStyle = "black";
-      //   this.ctx.font = "20px Comic Sans MS";
-      //   this.ctx.fillText("Pressione R para jogar novamente", 90, 300);
-      // }
       this.isOpenModalFimDeJogo = true;
       this.jogoRodando = false;
-    },
-    reiniciarJogo() {
-      window.location.reload();
     },
 
     resetSnake(head) {
