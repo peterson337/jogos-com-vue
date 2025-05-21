@@ -6,6 +6,10 @@
       >Jogo da forca</RouterLink
     >
 
+    <RouterLink style="color: #0bd644" class="react" to="/snake-game">
+      Jogo da cobrinha
+    </RouterLink>
+
     <a href="https://jogos-com-react.vercel.app/" class="react"
       >Jogos com react</a
     >
