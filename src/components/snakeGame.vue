@@ -147,20 +147,11 @@ export default {
         head.x += this.blockSize;
       }
 
-      // console.log(this.canvas.width + head.x - head.x);
-
-      // console.log(this.canvas.width);
-
-      // console.log(
-      //   "calculo",
-      //   this.canvas.width + window.innerWidth - window.innerWidth
-      // );
-
       if (innerWidth <= 600) {
         if (
-          // head.x > this.canvas.width - 20 ||
+          head.x === this.canvas.width + 197 ||
           head.x === -30 ||
-          // head.y > this.canvas.height - 10 ||
+          head.y === this.canvas.height + 311 ||
           head.y === -20
         ) {
           this.gameOver();
