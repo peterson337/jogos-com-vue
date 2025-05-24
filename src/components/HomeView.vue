@@ -7,7 +7,15 @@
     >
 
     <RouterLink style="color: #0bd644" class="react" to="/snake-game">
-      Jogo da cobrinha
+      Jogo da cobrinha (Snake game)
+    </RouterLink>
+
+    <RouterLink
+      style="color: #0bd644"
+      class="react"
+      to="/rock-paper-scissors-game"
+    >
+      Pedra, papel e tesoura (Rock, Paper, Scissors Game)
     </RouterLink>
 
     <a href="https://jogos-com-react.vercel.app/" class="react"

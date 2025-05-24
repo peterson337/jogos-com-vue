@@ -20,6 +20,11 @@ const router = createRouter({
       name: "SnakeGame",
       component: () => import("../components/snakeGame.vue"),
     },
+    {
+      path: "/rock-paper-scissors-game",
+      name: "Rock, Paper, Scissors Game",
+      component: () => import("../components/Rock-paper-scissors-game.vue"),
+    },
   ],
 });
 

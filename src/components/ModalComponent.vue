@@ -12,6 +12,18 @@
           Recomeçar o jogo
         </button>
       </div>
+
+      <div v-if="content === 'rock paper scissors'">
+        <h3>{{ resultado }}</h3>
+        <h4>Pressione R ou clique no botão vermelho para jogar novamente</h4>
+        <button
+          style="margin-bottom: 10px"
+          class="btn btn-danger"
+          @click="content === 'snakeGame' ? reiniciarJogo : $emit('resetGame')"
+        >
+          Recomeçar o jogo
+        </button>
+      </div>
     </div>
   </section>
 </template>
@@ -19,9 +31,23 @@
 <script>
 export default {
   name: "ModalComponent",
+  data() {
+    return {
+      quemVenceu: this.quemVenceu,
+    };
+  },
+
   props: {
     content: {
-      content: String,
+      type: String,
+    },
+
+    reiniciarGame: {
+      type: Function,
+    },
+
+    resultado: {
+      type: String,
     },
   },
 
